@@ -1,1 +1,4 @@
-try CNN and ANN
+Future improvement (for writing in report):
+    - Add background removal to aid in image classifications (since the images in this dataset is on a mostly blue background, not much different from having the background removed).
+    - Because of the lack of background removal, images with background will cause the models to produce the wrong prediction
+    - Expand the dataset to contain more images in more enviroments.
