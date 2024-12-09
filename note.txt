@@ -1,4 +1,7 @@
 Future improvement (for writing in report):
-    - Add background removal to aid in image classifications (since the images in this dataset is on a mostly blue background, not much different from having the background removed).
-    - Because of the lack of background removal, images with background will cause the models to produce the wrong prediction
-    - Expand the dataset to contain more images in more enviroments.
+•	Add background removal to aid in image classifications (since the images in this dataset are on a mostly blue background, not much different from having the background removed).
+•	Because of the lack of background removal, images with background will cause the models to produce the wrong prediction
+    -	For background removal, we can use a python library like OpenCV or rembg to remove the background in the image preprocessing step. 
+    -	However, background removal can be computationally expensive. We can consider removing the background in advance and saving them to disk if the dataset is large. Then the training and testing step is unchanged. 
+    -	For making prediction with new image, we will first remove the background in the image preprocessing step (remove the background before we resize and normalize the images) then fit it to the model.
+•	Expand the dataset to contain more images in more environments.
