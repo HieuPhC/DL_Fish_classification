@@ -8,55 +8,53 @@ import numpy as np
 import pandas as pd
 
 import tensorflow as tf
-
+from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
 
-save_path = f"cnn-1(2).keras"
+save_path = f"cnn_1_model.keras"
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
-BATCH_SIZE = 32
-path = ["Fish_Dataset/Shrimp/Shrimp/00001.png"]
-x_test = pd.DataFrame({'path': path})
+BATCH_SIZE = 1
 
+# Path to the image for prediction
+path = ["Fish_Dataset/Red Mullet/Red Mullet/00001.png"]
+label = ['dummy' for _ in range(len(path))]
 
-def preprocess_image(file_path):
-    # Read and decode the image
-    img = tf.io.read_file(file_path)
-    img = tf.image.decode_png(img, channels=3)
-    img = tf.image.resize(img, [IMG_HEIGHT, IMG_WIDTH])
-    img = img / 255.0  # Rescale the image pixels to [0, 1]
-    return img
+# Prepare dataframe for the test image
+x_test = pd.DataFrame({'path': path, 'label': label})
 
-def create_dataset(dataframe, batch_size=BATCH_SIZE):
-    paths = dataframe['path'].values
-    
-    # Create TensorFlow dataset for paths
-    dataset = tf.data.Dataset.from_tensor_slices(paths)
-    dataset = dataset.map(lambda x: preprocess_image(x), num_parallel_calls=tf.data.AUTOTUNE)
-    
-    # Batch and prefetch
-    dataset = dataset.batch(batch_size).prefetch(buffer_size=tf.data.AUTOTUNE)
-    
-    return dataset
+# Create the ImageDataGenerator for preprocessing (rescaling)
+test_data_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255.0)
 
-# Load the saved model
+# Generate the test data (images only, no labels)
+test = test_data_gen.flow_from_dataframe(
+    dataframe=x_test,
+    x_col='path',
+    y_col='label',
+    target_size=(IMG_HEIGHT, IMG_WIDTH),
+    color_mode='rgb',
+    class_mode='categorical', 
+    batch_size=BATCH_SIZE,
+    shuffle=False  # Ensure no shuffling
+)
+
+# Load the model
+model = load_model(save_path)
+
+# Perform prediction (for all images in the generator)
+pred = model.predict(test, steps=len(test))  # Predict for all images
+pred = np.argmax(pred, axis=1)  # Get the predicted class index
+
+# Define labels and reverse label encoding
 labels = ['Black Sea Sprat', 'Gilt-Head Bream', 'Hourse Mackerel',
-       'Red Mullet', 'Red Sea Bream', 'Sea Bass', 'Shrimp',
-       'Striped Red Mullet', 'Trout']
+          'Red Mullet', 'Red Sea Bream', 'Sea Bass', 'Shrimp',
+          'Striped Red Mullet', 'Trout']
 
 unique_labels = sorted(set(labels))
 label_encoder = {label: idx for idx, label in enumerate(unique_labels)}
 
-model = load_model(save_path)
-
-test = create_dataset(x_test)
-
-pred = model.predict(test)
-pred = np.argmax(pred, axis=1)
-
-# Reverse mapping from label encoder
 reverse_label_encoder = {idx: label for label, idx in label_encoder.items()}
 
-# Convert prediction from encoded to class name
+# Convert the prediction index to the actual class name
 pred_class_name = reverse_label_encoder[pred[0]]
-print(pred_class_name)
+print(f"Predicted Class: {pred_class_name}")
