@@ -17,7 +17,7 @@ IMG_WIDTH = 224
 BATCH_SIZE = 1
 
 # Path to the image for prediction
-path = ["Fish_Dataset/Red Mullet/Red Mullet/00001.png"]
+path = ["test_images/big-live-alive-raw-fresh-260nw-789090217.png"]
 label = ['dummy' for _ in range(len(path))]
 
 # Prepare dataframe for the test image
