@@ -1,0 +1,11 @@
+- CNN:
+    Test evaluation: accuracy: 0.9989 - loss: 0.0060
+    Minimum Validation Loss: 0.005664931610226631
+    Training Accuracy at Min Val Loss: 0.9703124761581421
+    Validation Accuracy at Min Val Loss: 1.0
+
+- ANN:
+    Test evaluation: accuracy: 0.7025 - loss: 0.8608
+    Minimum Validation Loss: 0.8636976480484009
+    Training Accuracy at Min Val Loss: 0.5144097208976746
+    Validation Accuracy at Min Val Loss: 0.6868055462837219
