@@ -1,0 +1,8 @@
+The necessary library you need to get before running the code is:
+
+numpy
+pandas
+matplotlib
+seaborn
+tensorflow
+keras
