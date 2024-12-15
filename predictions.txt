@@ -1,0 +1,4 @@
+Predictions for image: example_input.png
+MobileNetV2 Prediction: Black Sea Sprat
+CNN Prediction: Black Sea Sprat
+ANN Prediction: Black Sea Sprat
